@@ -2,32 +2,69 @@
 
 import time
 import random
+import sys
 
-die0 = ['R', 'I', 'F', 'O', 'B', 'X']
-die1 = ['I', 'F', 'E', 'H', 'E', 'Y']
-die2 = ['D', 'E', 'N', 'O', 'W', 'S']
-die3 = ['U', 'T', 'O', 'K', 'N', 'D']
-die4 = ['H', 'M', 'S', 'R', 'A', 'O']
-die5 = ['L', 'U', 'P', 'E', 'T', 'S']
-die6 = ['A', 'C', 'I', 'T', 'O', 'A']
-die7 = ['Y', 'L', 'G', 'K', 'U', 'E']
-die8 = ['Qu', 'B', 'M', 'J', 'O', 'A']
-die9 = ['E', 'H', 'I', 'S', 'P', 'N']
-die10 = ['V', 'E', 'T', 'I', 'G', 'N']
-die11 = ['B', 'A', 'L', 'I', 'Y', 'T']
-die12 = ['E', 'Z', 'A', 'V', 'N', 'D']
-die13 = ['R', 'A', 'L', 'E', 'S', 'C']
-die14 = ['U', 'W', 'I', 'L', 'R', 'G']
-die15 = ['P', 'A', 'C', 'E', 'M', 'D']
+def create_graph(choices, graph_num):
+	number = 0
+	for key, value in choices.items():
+		if number < 4:
+			#print(key)
+			stuff = random.choice(value)
+			number += 1
+			graph_num.append(stuff)
 
+#q is qu
+die0 = ['a', 'a', 'a', 'f', 'r', 's']
+die1 = ['a', 'a', 'e', 'e', 'e', 'e']
+die2 = ['a', 'a', 'f', 'i', 'r', 's']
+die3 = ['a', 'd', 'e', 'n', 'n', 'n']
+die4 = ['a', 'e', 'e', 'e', 'e', 'm']
+die5 = ['a', 'e', 'e', 'g', 'm', 'u']
+die6 = ['a', 'e', 'g', 'm', 'n', 'n']
+die7 = ['a', 'f', 'i', 'r', 's', 'y']
+die8 = ['q', 'b', 'm', 'j', 'o', 'a']
+die9 = ['b', 'j', 'k', 'q', 'x', 'z']
+die10 = ['c', 'c', 'e', 'n', 's', 't']
+die11 = ['c', 'e', 'i', 'i', 'l', 't']
+die12 = ['c', 'e', 'i', 'p', 'l', 't']
+die13 = ['c', 'e', 'i', 'p', 's', 't']
+die14 = ['d', 'd', 'h', 'n', 'o', 't']
+die15 = ['d', 'h', 'h', 'l', 'o', 'r']
+die16 = ['d', 'h', 'l', 'n', 'o', 'r']
+die17 = ['e', 'i', 'i', 'i', 't', 't']
+die18 = ['e', 'm', 'o', 't', 't', 't']
+die19 = ['e', 'n', 's', 's', 's', 'u']
+die20 = ['f', 'i', 'p', 'r', 's', 'y']
+die21 = ['g', 'o', 'r', 'r', 'v', 'w']
+die22 = ['i', 'p', 'r', 'r', 'r', 'y']
+die23 = ['n', 'o', 'o', 't', 'u', 'w']
+die24 = ['o', 'o', 'o', 't', 't', 'u']
 
 choices = {
 		'zero':die0, 'one':die1, 'two':die2, 'three':die3, 
 		'four':die4, 'five':die5, 'six':die6, 'seven':die7, 'eight':die8, 
 		'nine':die9, 'ten':die10, 'eleven':die11, 'twelve':die12, 'thirteen':die13, 
-		'fourteen':die14, 'fifteen':die15
+		'fourteen':die14, 'fifteen':die15, 'sixteen':die16, 'seventeen':die17, 'eighteen':die18,
+		'nineteen':die19,'twenty':die20, 'twenty-one':die21, 'twenty-two':die22, 'twenty-three':die23,
+		'twenty-four':die24
 		}
+		
+graph1 = []
+graph2 = []
+graph = []		
+
+while True:
+	create_graph(choices, graph1)
+	graph.append(graph1)
+	create_graph(choices, graph2)
+	graph.append(graph2)
+	break
 
 
-for key, value in choices.items():
-	print(random.choice(value), key)
+for r in graph:
+	for item in r:
+		sys.stdout.write(item)
+	print()
+
+
+

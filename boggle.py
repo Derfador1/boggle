@@ -3,6 +3,7 @@
 import time
 import random
 import sys
+import os
 
 import curses
 from curses.textpad import Textbox, rectangle
@@ -91,7 +92,6 @@ choices = {
 		'fourteen':die14, 'fifteen':die15
 		}
 
-
 def main(stdscr):
 	# found the following code with a little seperate implementation on:
 	# stackoverflow.com/questions/746082/
@@ -149,7 +149,7 @@ def main(stdscr):
 	while True:
 		stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
 		final = []
-		tmp = []
+		check_list = []
 		win = curses.initscr()
 		c = stdscr.getch()
 		if c == ord('b'):
@@ -167,34 +167,67 @@ def main(stdscr):
 			for item in letter:
 				number += 1
 				final.append(item)
-				tmp.append(item)
+				check_list.append(item)
 				if number % 4 == 0:
-					tmp.append('\n')
+					check_list.append('\n')
 					final_list = ''.join(final)
 					stdscr.addstr(i+1, 1, final_list)
 					win.refresh()
 					i += 1
 					final = []
-			#final1 = ''.join(final)
+			i += 2
+			stdscr.addstr(i, 0, wordlist)
+			win.refresh()
 			
-			#stdscr.addstr(i, 2, final1)
-			#win.refresh()
-			stdscr.addstr(i+2, 0, wordlist)
-			win.refresh()
-			stdscr.addstr(i+4, 0, wordlist[2])
-			win.refresh()
+			guess = ""
+			guessedWords = []
+			
+			i += 10
+			
+			stdscr.addstr(i, 0, "Please choose a word: ")
 			
 			wordlist = wordlist.split(' ')
-			for item in wordlist:
-				print(item)
-
-			#stuff = 0
-			#for item in tmp:
-				#stuff += 1
-				#if number % 4 == 0: 
-					#print(item)
 			
-			#win.getch()
+			points = 0
+			
+			#raw_input change
+			
+			##decode(encoding='utf-8')
+			
+			#curses.echo()
+			
+			#while wordlist:
+				#stdscr.nodelay(True)
+				#s = stdscr.getch()
+				#if s != -1:
+					#chr(s)
+					#if s == 10:
+						#for x in range(0, len(guess)):
+							#stdscr.addstr(" ")
+						#stdscr.move(i+1, 0)
+						#if guess in wordlist:
+							#wordlist.remove(guess)
+							#wordlen = len(guess)
+							#if wordlen <= 4:
+								#points += 1
+							
+							#guessedWords.append(guess)
+							#guess = ""
+						#else:
+							#guess = ""
+					#elif s == 263:
+						#if guess:
+							#guess = guess.replace(guess[-1],"")
+						#else:
+							#pass
+					#elif s < 256:
+						#guess += str(chr(s))
+				
+			#stdscr.nodelay(False)
+			#stdscr.addstr(guess + "\n")
+			#stdscr.addstr(' '.join(wordlist))
+			#stdscr.addstr("\nYou correctly guessed:\n")
+			#stdscr.getkey()
 		elif c == ord('q'):
 			break	
 		elif c == curses.KEY_HOME:

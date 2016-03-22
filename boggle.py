@@ -149,36 +149,52 @@ def main(stdscr):
 	while True:
 		stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
 		final = []
+		tmp = []
 		win = curses.initscr()
 		c = stdscr.getch()
 		if c == ord('b'):
 			begin_x = 0
-			begin_y = 10
-			height = 5
-			width = 40
+			begin_y = 0
+			height = 6
+			width = 7
 			print('Beginning...')
-			number = 0
-			i = 1
-			for item in letter:
-				number += 1
-				if number % 4 == 0:
-					output = (item + '\n')
-					final.append(output)
-				else:
-					final.append(item)
-			final1 = ''.join(final)
-			
-			stdscr.addstr(i, 0, final1)
-			win.refresh()
-			stdscr.addstr(i+5, 0, wordlist)
-			win.refresh()
-			
 			box1 = curses.newwin(height, width, begin_y, begin_x)
 			box1.box()
 			win.refresh()
 			box1.refresh()
+			number = 0
+			i = 1
+			for item in letter:
+				number += 1
+				final.append(item)
+				tmp.append(item)
+				if number % 4 == 0:
+					tmp.append('\n')
+					final_list = ''.join(final)
+					stdscr.addstr(i+1, 1, final_list)
+					win.refresh()
+					i += 1
+					final = []
+			#final1 = ''.join(final)
 			
-			win.getch()
+			#stdscr.addstr(i, 2, final1)
+			#win.refresh()
+			stdscr.addstr(i+2, 0, wordlist)
+			win.refresh()
+			stdscr.addstr(i+4, 0, wordlist[2])
+			win.refresh()
+			
+			wordlist = wordlist.split(' ')
+			for item in wordlist:
+				print(item)
+
+			#stuff = 0
+			#for item in tmp:
+				#stuff += 1
+				#if number % 4 == 0: 
+					#print(item)
+			
+			#win.getch()
 		elif c == ord('q'):
 			break	
 		elif c == curses.KEY_HOME:

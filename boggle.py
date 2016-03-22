@@ -145,16 +145,15 @@ def main(stdscr):
 			
 			points = 0
 			
-			t_end = time.time() + 10
+			t_end = time.time() + 1
 			
-			while time.time() < t_end and wordlist:
+			while time.time() < t_end:
 				choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))
-				
-				
+				stdscr.nodelay(True)
 				stdscr.refresh()
 				stdscr.getch()
 				curses.endwin()
-				
+		
 				#if str(choice) in correct_words:
 			
 			#raw_input change

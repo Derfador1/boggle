@@ -91,7 +91,9 @@ choices = {
 		}
 
 
-def main(stdscr):
+def main():
+	text = open("/usr/share/dict/british-english", 'r').readlines()
+	
 	graph1 = []
 	graph2 = []
 	graph3 = []
@@ -99,27 +101,46 @@ def main(stdscr):
 	graph = []
 	
 	while True:
-		stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
+		graph_make(graph1, graph2, graph3, graph4, graph)
+		break
+		
 
-		c = stdscr.getch()
-		if c == ord('p'):
-			print('Beginning...')
-			graph_make(graph1, graph2, graph3, graph4, graph)
-			for r in graph:
-				for item in r:
-					sys.stdout.write(item)
-				print()
-		elif c == ord('q'):
-			break	
-		elif c == curses.KEY_HOME:
-			x = y = 0
-curses.wrapper(main)
+	for r in graph:
+		for item in r:
+			sys.stdout.write(item)
+		print()
+		
+if __name__ == "__main__":
+	try:
+		main()
+	#catches the keyboard interrupt if ^C is used to end program
+	except KeyboardInterrupt:
+		print('\nInterrupted...')
+		try:
+			sys.exit(0)
+		except SystemExit:
+			os._exit(0)
 
-#while True:
-	#graph_make(graph1, graph2, graph3, graph4, graph)
-	#break
+#def main(stdscr):
+	#graph1 = []
+	#graph2 = []
+	#graph3 = []
+	#graph4 = []
+	#graph = []
+	
+	#while True:
+		#stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
 
-#for r in graph:
-	#for item in r:
-		#sys.stdout.write(item)
-	#print()
+		#c = stdscr.getch()
+		#if c == ord('p'):
+			#print('Beginning...')
+			#graph_make(graph1, graph2, graph3, graph4, graph)
+			#for r in graph:
+				#for item in r:
+					#sys.stdout.write(item)
+				#print()
+		#elif c == ord('q'):
+			#break	
+		#elif c == curses.KEY_HOME:
+			#x = y = 0
+#curses.wrapper(main)

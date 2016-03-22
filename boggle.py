@@ -6,6 +6,8 @@ import sys
 
 import curses
 from curses.textpad import Textbox, rectangle
+from itertools import permutations
+import re
 
 random.seed(time.time())
 
@@ -14,7 +16,6 @@ def create_graph(choices, graph_num):
 	number = 0
 	for key, value in choices.items():
 		if number < 4:
-			#print(key)
 			stuff = random.choice(value)
 			number += 1
 			graph_num.append(stuff)
@@ -91,28 +92,92 @@ choices = {
 		}
 
 
-def main():
+def main(stdscr):
+	# found the following code with a little seperate implementation on:
+	# stackoverflow.com/questions/746082/
+	# how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-solver#750012
+	
+	letter = [random.choice(i) for i in choices.values()]
+	number = 1
+	
 	text = open("/usr/share/dict/british-english", 'r').readlines()
 	
-	graph1 = []
-	graph2 = []
-	graph3 = []
-	graph4 = []
-	graph = []
+	graph = ""
+	
+	for item in letter:
+		graph += str(item).lower()
+		if number % 4 == 0:
+			graph += ' '
+		number += 1
+	graph = graph.split()
+	print(graph)
+	
+	num_rows = len(graph)
+	num_cols = len(graph[0])
+	
+	alphabet = ''.join(set(''.join(graph)))
+	words = re.compile('[' + alphabet + ']{3,}$', re.I).match
+	
+	possible_words = set(word.rstrip('\n') for word in open('/usr/share/dict/words') if words(word.lower()))
+	prefixes = set(word[:i] for word in possible_words for i in range(2, len(word) + 1))
+	
+	def solve():
+		for y, row in enumerate(graph):
+			for x, letter in enumerate(row):
+				for result in extending(letter, ((x, y),)):
+					yield result
+		
+	def extending(prefix, path):
+		if prefix in possible_words:
+			yield (prefix, path)
+		for (nx, ny) in neighbors(path[-1]):
+			if (nx, ny) not in path:
+				prefix1 = prefix + graph[ny][nx]
+				if prefix1 in prefixes:
+					for result in extending(prefix1, path + ((nx, ny),)):
+						yield result
+	
+	def neighbors(variable):
+		(x, y) = variable
+		for nx in range(max(0, x - 1), min(x+2, num_cols)):
+			for ny in range(max(0, y - 1), min(y + 2, num_rows)):
+				yield (nx, ny)
+			
+	
+	wordlist = (' '.join(sorted(set(word for (word, path) in solve()))))
 	
 	while True:
-		graph_make(graph1, graph2, graph3, graph4, graph)
-		break
-		
+		stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
+		final = []
+		win = curses.initscr()
+		c = stdscr.getch()
+		if c == ord('p'):
+			print('Beginning...')
+			number = 0
+			i = 1
+			for item in letter:
+				number += 1
+				if number % 4 == 0:
+					output = (item + '\n')
+					final.append(output)
+					#stdscr.addstr(i, 0, output)
+				else:
+					final.append(item)
+			final1 = ''.join(final)
+			
+			stdscr.addstr(i, 0, final1)
+			win.refresh()
 
-	for r in graph:
-		for item in r:
-			sys.stdout.write(item)
-		print()
+			print(wordlist)
+		elif c == ord('q'):
+			break	
+		elif c == curses.KEY_HOME:
+			x = y = 0	
+	
 		
 if __name__ == "__main__":
 	try:
-		main()
+		curses.wrapper(main)
 	#catches the keyboard interrupt if ^C is used to end program
 	except KeyboardInterrupt:
 		print('\nInterrupted...')

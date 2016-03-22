@@ -151,7 +151,11 @@ def main(stdscr):
 		final = []
 		win = curses.initscr()
 		c = stdscr.getch()
-		if c == ord('p'):
+		if c == ord('b'):
+			begin_x = 0
+			begin_y = 10
+			height = 5
+			width = 40
 			print('Beginning...')
 			number = 0
 			i = 1
@@ -160,15 +164,21 @@ def main(stdscr):
 				if number % 4 == 0:
 					output = (item + '\n')
 					final.append(output)
-					#stdscr.addstr(i, 0, output)
 				else:
 					final.append(item)
 			final1 = ''.join(final)
 			
 			stdscr.addstr(i, 0, final1)
 			win.refresh()
-
-			print(wordlist)
+			stdscr.addstr(i+5, 0, wordlist)
+			win.refresh()
+			
+			box1 = curses.newwin(height, width, begin_y, begin_x)
+			box1.box()
+			win.refresh()
+			box1.refresh()
+			
+			win.getch()
 		elif c == ord('q'):
 			break	
 		elif c == curses.KEY_HOME:

@@ -100,67 +100,92 @@ def main(stdscr):
 	
 	wordlist = (' '.join(sorted(set(word for (word, path) in solve()))))
 	
-	while True:
+	guess = ""
+	guessedWords = []	
+	points = 0
+	
+	t_end = time.time() + 15
+	
+	stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
+	
+	c = stdscr.getch()
+	if c == ord('b'):
+		print("beginning..")
+	elif c == ord('q'):
+		pass
+	elif c == curses.KEY_HOME:
+		x = y = 0
+		
+	begin_x = 0
+	begin_y = 0
+	i = begin_y
+	height = 6
+	width = 7
+	box1 = curses.newwin(height, width, begin_y, begin_x)
+	box1.box()
+	stdscr.refresh()
+	box1.refresh()
+
+	final = []
+	check_list = []	
+
+	tmp_word = wordlist
+
+	number = 0
+	for item in letter:
+		number += 1
+		final.append(item)
+		check_list.append(item)
+		if number % 4 == 0:
+			check_list.append('\n')
+			final_list = ''.join(final)
+			stdscr.addstr(i + 2, 1, final_list)
+			stdscr.refresh()
+			i += 1
+			final = []
+	i += 3
+	stdscr.addstr(i, 0, wordlist)
+	stdscr.refresh()
+	i += 10		
+	
+	while time.time() < t_end and wordlist:
+		
 		stdscr = curses.initscr()
 
-		stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
+		choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))
+				
+		tmp_cord = wordlist.split(' ')				
+
+		if str(choice) in tmp_cord:
+			tmp_cord.remove(choice)
+			guessedWords.append(choice)
+			if len(choice) >= 3 and len(choice) <= 4:
+				points += 1
+			elif len(choice) == 5:
+				points += 2
+			elif len(choice) == 6:
+				points += 3
+			elif len(choice) == 7:
+				points += 5
+			elif len(choice) > 7 and len(choice) <= 16:
+				points += 11
+		else:
+			stdscr.addstr(i + 2, 0, 'Invalid input')
+			#stdscr.addstr(i + 3, 0, choice)
+
+		stdscr.refresh()
 		
-		final = []
-		check_list = []
-		
-		c = stdscr.getch()
-		if c == ord('b'):
-			begin_x = 0
-			begin_y = 0
-			height = 6
-			width = 7
-			print('Beginning...')
-			box1 = curses.newwin(height, width, begin_y, begin_x)
-			box1.box()
-			stdscr.refresh()
-			box1.refresh()
-			number = 0
-			i = 1
-			for item in letter:
-				number += 1
-				final.append(item)
-				check_list.append(item)
-				if number % 4 == 0:
-					check_list.append('\n')
-					final_list = ''.join(final)
-					stdscr.addstr(i+1, 1, final_list)
-					stdscr.refresh()
-					i += 1
-					final = []
-			i += 2
-			stdscr.addstr(i, 0, wordlist)
-			stdscr.refresh()
-			
-			guess = ""
-			guessedWords = []
-			
-			i += 10
-			
-			wordlist = wordlist.split(' ')
-			
-			points = 0
-			
-			t_end = time.time() + 1
-			
-			while time.time() < t_end:
-				choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))
-				stdscr.nodelay(True)
-				stdscr.refresh()
-				stdscr.getch()
-				curses.endwin()
+	curses.endwin()
+				
+	print(tmp_cord)
+	print(guessedWords)
+	print(points)
 		
 				#if str(choice) in correct_words:
 			
 			#raw_input change
 			
 			##decode(encoding='utf-8')
-			
-			#curses.echo()
 			
 			#while wordlist:
 				#stdscr.nodelay(True)
@@ -194,10 +219,6 @@ def main(stdscr):
 			#stdscr.addstr(' '.join(wordlist))
 			#stdscr.addstr("\nYou correctly guessed:\n")
 			#stdscr.getkey()
-		elif c == ord('q'):
-			break	
-		elif c == curses.KEY_HOME:
-			x = y = 0	
 	
 		
 if __name__ == "__main__":

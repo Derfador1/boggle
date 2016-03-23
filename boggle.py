@@ -104,7 +104,7 @@ def main(stdscr):
 	guessedWords = []	
 	points = 0
 	
-	t_end = time.time() + 15
+	t_end = time.time() + 11
 	
 	stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
 	
@@ -149,7 +149,6 @@ def main(stdscr):
 	i += 10		
 	
 	while time.time() < t_end and wordlist:
-		
 		stdscr = curses.initscr()
 
 		choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))
@@ -174,9 +173,8 @@ def main(stdscr):
 			#stdscr.addstr(i + 3, 0, choice)
 
 		stdscr.refresh()
-		
 	curses.endwin()
-				
+	print("\n")		
 	print(tmp_cord)
 	print(guessedWords)
 	print(points)

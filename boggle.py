@@ -160,8 +160,7 @@ def main(stdscr):
 		if c != -1:
 			chr(c)
 			if c == 10:
-				for x in range(0, 10):
-					stdscr.addstr(i + 1, 0, " ")
+				stdscr.addstr(i + 1, 0, " " * 10)
 				stdscr.move(i + 1, 0)
 				if guess in wordlist:
 					wordlist.remove(guess)
@@ -172,10 +171,10 @@ def main(stdscr):
 				else:
 					guess = ""
 			elif c == 263:
-				if guess:
-					guess = guess.replace(guess[-1], "")
-				else:
-					pass
+				(y, x) = stdscr.getyx()
+				stdscr.addstr(y+1, x, " ")
+				stdscr.move(y+1, x - 1)
+				stdscr.refresh()
 			else:
 				guess += str(chr(c))
 				

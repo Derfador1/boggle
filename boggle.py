@@ -100,11 +100,13 @@ def main(stdscr):
 	
 	wordlist = (' '.join(sorted(set(word for (word, path) in solve()))))
 	
+	stdscr = curses.initscr()
+	
 	guess = ""
 	guessedWords = []	
 	points = 0
 	
-	t_end = time.time() + 11
+	t_end = time.time() + 15
 	
 	stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
 	
@@ -129,8 +131,6 @@ def main(stdscr):
 	final = []
 	check_list = []	
 
-	tmp_word = wordlist
-
 	number = 0
 	for item in letter:
 		number += 1
@@ -146,38 +146,69 @@ def main(stdscr):
 	i += 3
 	stdscr.addstr(i, 0, wordlist)
 	stdscr.refresh()
-	i += 10		
+	i += 10
+	
+	wordlist = wordlist.split(' ')
+
 	
 	while time.time() < t_end and wordlist:
-		stdscr = curses.initscr()
-
-		choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))
+		stdscr.nodelay(True)
+		
+		stdscr.addstr(i, 0, "Enter a word:")
+		
+		c = stdscr.getch()
+		if c != -1:
+			chr(c)
+			if c == 10:
+				for x in range(0, 10):
+					stdscr.addstr(i + 1, 0, " ")
+				stdscr.move(i + 1, 0)
+				if guess in wordlist:
+					wordlist.remove(guess)
+					wordlen = len(guess)
+										
+					guessedWords.append(guess)
+					guess = ""
+				else:
+					guess = ""
+			elif c == 263:
+				if guess:
+					guess = guess.replace(guess[-1], "")
+				else:
+					pass
+			else:
+				guess += str(chr(c))
 				
-		tmp_cord = wordlist.split(' ')				
+			stdscr.addstr(i + 1, 0, guess)
 
-		if str(choice) in tmp_cord:
-			tmp_cord.remove(choice)
-			guessedWords.append(choice)
-			if len(choice) >= 3 and len(choice) <= 4:
-				points += 1
-			elif len(choice) == 5:
-				points += 2
-			elif len(choice) == 6:
-				points += 3
-			elif len(choice) == 7:
-				points += 5
-			elif len(choice) > 7 and len(choice) <= 16:
-				points += 11
-		else:
-			stdscr.addstr(i + 2, 0, 'Invalid input')
-			#stdscr.addstr(i + 3, 0, choice)
 
-		stdscr.refresh()
-	curses.endwin()
-	print("\n")		
-	print(tmp_cord)
-	print(guessedWords)
-	print(points)
+		#choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))
+				
+		#tmp_cord = wordlist.split(' ')				
+
+		#if str(choice) in tmp_cord:
+			#tmp_cord.remove(choice)
+			#guessedWords.append(choice)
+			#if len(choice) >= 3 and len(choice) <= 4:
+				#points += 1
+			#elif len(choice) == 5:
+				#points += 2
+			#elif len(choice) == 6:
+				#points += 3
+			#elif len(choice) == 7:
+				#points += 5
+			#elif len(choice) > 7 and len(choice) <= 16:
+				#points += 11
+		#else:
+			#stdscr.addstr(i + 2, 0, 'Invalid input')
+			##stdscr.addstr(i + 3, 0, choice)
+
+		#stdscr.refresh()
+	#curses.endwin()
+	#print("\n")		
+	#print(tmp_cord)
+	#print(guessedWords)
+	#print(points)
 		
 				#if str(choice) in correct_words:
 			
@@ -212,11 +243,12 @@ def main(stdscr):
 					#elif s < 256:
 						#guess += str(chr(s))
 				
-			#stdscr.nodelay(False)
-			#stdscr.addstr(guess + "\n")
+	#stdscr.nodelay(False)
+	#stdscr.addstr("HAppy: " + guess + "\n")
 			#stdscr.addstr(' '.join(wordlist))
 			#stdscr.addstr("\nYou correctly guessed:\n")
 			#stdscr.getkey()
+
 	
 		
 if __name__ == "__main__":

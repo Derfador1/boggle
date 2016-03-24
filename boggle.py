@@ -12,6 +12,17 @@ import re
 
 random.seed(time.time())
 
+def box(stdscr, i):
+	begin_x = 0
+	begin_y = 0
+	i = begin_y
+	height = 6
+	width = 7
+	box1 = curses.newwin(height, width, begin_y, begin_x)
+	box1.box()
+	stdscr.refresh()
+	box1.refresh()
+
 die0 = ['a', 'e', 'a', 'n', 'e', 'g']
 die1 = ['a', 'h', 's', 'p', 'c', 'o']
 die2 = ['a', 's', 'p', 'f', 'f', 'k']
@@ -44,6 +55,7 @@ def main(stdscr):
 	
 	letter = [random.choice(i) for i in choices.values()]
 	number = 1
+	i = 0
 	
 	text = open("/usr/share/dict/british-english", 'r').readlines()
 	
@@ -55,10 +67,13 @@ def main(stdscr):
 			graph += ' '
 		number += 1
 	graph = graph.split()
-	print(graph)
+	#print(graph)
 	
 	num_rows = len(graph)
 	num_cols = len(graph[0])
+	
+	print(num_rows)
+	print(num_cols)
 	
 	alphabet = ''.join(set(''.join(graph)))
 	words = re.compile('[' + alphabet + ']{3,}$', re.I).match
@@ -77,6 +92,8 @@ def main(stdscr):
 			yield (prefix, path)
 		for (nx, ny) in neighbors(path[-1]):
 			if (nx, ny) not in path:
+				print(nx)
+				print(ny)
 				prefix1 = prefix + graph[ny][nx]
 				if prefix1 in prefixes:
 					for result in extending(prefix1, path + ((nx, ny),)):
@@ -99,23 +116,21 @@ def main(stdscr):
 	
 	stdscr.addstr(0, 0, "Enter 'b' to begin: (Ctrl + C will end the application)")
 	
-	c = stdscr.getch()
-	if c == ord('b'):
-		print("beginning..")
-	elif c == ord('q'):
-		pass
-	elif c == curses.KEY_HOME:
-		x = y = 0
-		
-	begin_x = 0
-	begin_y = 0
-	i = begin_y
-	height = 6
-	width = 7
-	box1 = curses.newwin(height, width, begin_y, begin_x)
-	box1.box()
-	stdscr.refresh()
-	box1.refresh()
+	while True:
+		c = stdscr.getch()
+		if c == ord('b'):
+			print("beginning..")
+			box(stdscr, i)
+			break
+		elif c == ord('q'):
+			return
+		elif c == curses.KEY_HOME:
+			x = y = 0
+		else:
+			y, x = stdscr.getyx()
+			stdscr.addstr(0, x, "Incorrect")
+			stdscr.move(0, x)
+	
 
 	final = []
 	check_list = []	
@@ -187,8 +202,7 @@ def main(stdscr):
 				
 			stdscr.addstr(i, 0, guess)
 	stdscr.refresh()
-	curses.endwin()
-	print("\n")		
+	curses.endwin()	
 	print("You guessed: " + ' '.join(guessed))
 	print("You recieved", points ,"points")
 	

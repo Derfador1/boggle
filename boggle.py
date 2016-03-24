@@ -92,10 +92,10 @@ def main(stdscr):
 			yield (prefix, path)
 		for (nx, ny) in neighbors(path[-1]):
 			if (nx, ny) not in path:
-					prefix1 = prefix + graph[ny][nx]
-					if prefix1 in prefixes:
-						for result in extending(prefix1, path + ((nx, ny),)):
-							yield result
+				prefix1 = prefix + graph[ny][nx]
+				if prefix1 in prefixes:
+					for result in extending(prefix1, path + ((nx, ny),)):
+						yield result
 	
 	def neighbors(variable):
 		x, y = variable

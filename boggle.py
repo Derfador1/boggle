@@ -12,15 +12,6 @@ import re
 
 random.seed(time.time())
 
-#acquired from stackoverflow.com/questions/21784625/how-to-input-a-word-in-ncurses-screen
-def my_raw_input(stdscr, r, c, prompt_string):
-	curses.echo()
-	stdscr.addstr(r, c, prompt_string)
-	stdscr.refresh()
-	input = stdscr.getstr(r + 1, c, 20)
-	return input
-
-
 die0 = ['a', 'e', 'a', 'n', 'e', 'g']
 die1 = ['a', 'h', 's', 'p', 'c', 'o']
 die2 = ['a', 's', 'p', 'f', 'f', 'k']
@@ -103,12 +94,10 @@ def main(stdscr):
 	stdscr = curses.initscr()
 	
 	guess = ""
-	guessedWords = []	
+	guessed = []	
 	points = 0
 	
-	t_end = time.time() + 15
-	
-	stdscr.addstr(0, 0, "Enter 'b' to begin:")
+	stdscr.addstr(0, 0, "Enter 'b' to begin: (Ctrl + C will end the application)")
 	
 	c = stdscr.getch()
 	if c == ord('b'):
@@ -155,114 +144,53 @@ def main(stdscr):
 	stdscr.move(i, 0)	
 	stdscr.refresh()
 	
-	while time.time() < t_end and wordlist:
-		stdscr.nodelay(True)
-				
-		c = stdscr.getch()
+	t_end = time.time() + 10
+	comp_time = time.time() + 7
 	
+	while time.time() < t_end and wordlist:
+		stdscr.nodelay(True)		
+		char = stdscr.getch()
 		stdscr.refresh()
 		
-		if c != -1:
-			chr(c)
-			if c == 10:
-				stdscr.addstr(i, 0, " " * 16)
+		if char != -1:
+			if chr(char) == "\n":
+				stdscr.addstr(i, 0, " " * len(guess))
 				stdscr.move(i, 0)
 				if guess in wordlist:
 					wordlist.remove(guess)
 					wordlen = len(guess)
-					#points				
-					guessedWords.append(guess)
+					
+					if wordlen <= 4:
+						points += 1
+					elif wordlen == 5:
+						points += 2
+					elif wordlen == 6:
+						points += 3
+					elif wordlen == 7:
+						points += 5
+					else:
+						points += 11
+							
+					guessed.append(guess)
 					guess = ""
 				else:
 					guess = ""
-			elif c == 263:
+			elif char == 263: #magic number for backspace because i do not know how to type the char version of it
 				if guess:
-					guess = guess.replace(guess[-1],"")
+					guess = guess[:-1]
 					(y, x) = stdscr.getyx()
 					stdscr.addstr(y, x-1, " ")
 					stdscr.move(y, x-1)
 					stdscr.refresh()
-				else:
-					pass
 			else:
-				guess += str(chr(c))
+				guess += str(chr(char))
 				
 			stdscr.addstr(i, 0, guess)
-	stdscr.nodelay(False)
 	stdscr.refresh()
 	curses.endwin()
-	print("here")		
-	print(wordlist)
-	print(guessedWords)
-	print(points)
-
-
-		#choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))
-				
-		#tmp_cord = wordlist.split(' ')				
-
-		#if str(choice) in tmp_cord:
-			#tmp_cord.remove(choice)
-			#guessedWords.append(choice)
-			#if len(choice) >= 3 and len(choice) <= 4:
-				#points += 1
-			#elif len(choice) == 5:
-				#points += 2
-			#elif len(choice) == 6:
-				#points += 3
-			#elif len(choice) == 7:
-				#points += 5
-			#elif len(choice) > 7 and len(choice) <= 16:
-				#points += 11
-		#else:
-			#stdscr.addstr(i + 2, 0, 'Invalid input')
-			##stdscr.addstr(i + 3, 0, choice)
-
-
-	#print("\n")		
-	#print(tmp_cord)
-	#print(guessedWords)
-	#print(points)
-		
-				#if str(choice) in correct_words:
-			
-			#raw_input change
-			
-			##decode(encoding='utf-8')
-			
-			#while wordlist:
-				#stdscr.nodelay(True)
-				#s = stdscr.getch()
-				#if s != -1:
-					#chr(s)
-					#if s == 10:
-						#for x in range(0, len(guess)):
-							#stdscr.addstr(" ")
-						#stdscr.move(i+1, 0)
-						#if guess in wordlist:
-							#wordlist.remove(guess)
-							#wordlen = len(guess)
-							#if wordlen <= 4:
-								#points += 1
-							
-							#guessedWords.append(guess)
-							#guess = ""
-						#else:
-							#guess = ""
-					#elif s == 263:
-						#if guess:
-							#guess = guess.replace(guess[-1],"")
-						#else:
-							#pass
-					#elif s < 256:
-						#guess += str(chr(s))
-				
-	#stdscr.nodelay(False)
-	#stdscr.addstr("HAppy: " + guess + "\n")
-			#stdscr.addstr(' '.join(wordlist))
-			#stdscr.addstr("\nYou correctly guessed:\n")
-			#stdscr.getkey()
-
+	print("\n")		
+	print("You guessed: " + ' '.join(guessed))
+	print("You recieved", points ,"points")
 	
 		
 if __name__ == "__main__":

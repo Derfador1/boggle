@@ -108,7 +108,7 @@ def main(stdscr):
 	
 	t_end = time.time() + 15
 	
-	stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
+	stdscr.addstr(0, 0, "Enter 'b' to begin:")
 	
 	c = stdscr.getch()
 	if c == ord('b'):
@@ -170,20 +170,31 @@ def main(stdscr):
 				if guess in wordlist:
 					wordlist.remove(guess)
 					wordlen = len(guess)
-										
+					#points				
 					guessedWords.append(guess)
 					guess = ""
 				else:
 					guess = ""
 			elif c == 263:
-				(y, x) = stdscr.getyx()
-				stdscr.addstr(y, x-1, "xcvvxcvxcvxc")
-				stdscr.move(y, x-1)
-				stdscr.refresh()
+				if guess:
+					guess = guess.replace(guess[-1],"")
+					(y, x) = stdscr.getyx()
+					stdscr.addstr(y, x-1, " ")
+					stdscr.move(y, x-1)
+					stdscr.refresh()
+				else:
+					pass
 			else:
 				guess += str(chr(c))
 				
 			stdscr.addstr(i, 0, guess)
+	stdscr.nodelay(False)
+	stdscr.refresh()
+	curses.endwin()
+	print("here")		
+	print(wordlist)
+	print(guessedWords)
+	print(points)
 
 
 		#choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))
@@ -207,8 +218,7 @@ def main(stdscr):
 			#stdscr.addstr(i + 2, 0, 'Invalid input')
 			##stdscr.addstr(i + 3, 0, choice)
 
-		#stdscr.refresh()
-	#curses.endwin()
+
 	#print("\n")		
 	#print(tmp_cord)
 	#print(guessedWords)

@@ -151,8 +151,8 @@ def main(stdscr):
 	wordlist = wordlist.split(' ')
 
 	stdscr.addstr(i, 0, "Enter a word:")
-
-	stdscr.move(i+1, 0)	
+	i += 1
+	stdscr.move(i, 0)	
 	stdscr.refresh()
 	
 	while time.time() < t_end and wordlist:
@@ -165,8 +165,8 @@ def main(stdscr):
 		if c != -1:
 			chr(c)
 			if c == 10:
-				stdscr.addstr(i + 1, 0, " " * 16)
-				stdscr.move(i + 1, 0)
+				stdscr.addstr(i, 0, " " * 16)
+				stdscr.move(i, 0)
 				if guess in wordlist:
 					wordlist.remove(guess)
 					wordlen = len(guess)
@@ -183,7 +183,7 @@ def main(stdscr):
 			else:
 				guess += str(chr(c))
 				
-			stdscr.addstr(i + 1, 0, guess)
+			stdscr.addstr(i, 0, guess)
 
 
 		#choice = (my_raw_input(stdscr, i, 0, "Make a guess: ").lower().decode(encoding='utf-8'))

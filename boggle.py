@@ -150,17 +150,22 @@ def main(stdscr):
 	
 	wordlist = wordlist.split(' ')
 
+	stdscr.addstr(i, 0, "Enter a word:")
+
+	stdscr.move(i+1, 0)	
+	stdscr.refresh()
 	
 	while time.time() < t_end and wordlist:
 		stdscr.nodelay(True)
-		
-		stdscr.addstr(i, 0, "Enter a word:")
-		
+				
 		c = stdscr.getch()
+	
+		stdscr.refresh()
+		
 		if c != -1:
 			chr(c)
 			if c == 10:
-				stdscr.addstr(i + 1, 0, " " * 10)
+				stdscr.addstr(i + 1, 0, " " * 16)
 				stdscr.move(i + 1, 0)
 				if guess in wordlist:
 					wordlist.remove(guess)
@@ -172,8 +177,8 @@ def main(stdscr):
 					guess = ""
 			elif c == 263:
 				(y, x) = stdscr.getyx()
-				stdscr.addstr(y+1, x, " ")
-				stdscr.move(y+1, x - 1)
+				stdscr.addstr(y, x-1, "xcvvxcvxcvxc")
+				stdscr.move(y, x-1)
 				stdscr.refresh()
 			else:
 				guess += str(chr(c))

@@ -6,21 +6,19 @@ import sys
 import os
 
 import curses
-from curses.textpad import Textbox, rectangle
+#from curses.textpad import Textbox, rectangle
 from itertools import permutations
 import re
 
 random.seed(time.time())
 
-def box(stdscr, i):
-    begin_x = 0
-    begin_y = 0
-    i = begin_y
-    height = 6
-    width = 7
+def stuff():
+    begin_x = 1
+    begin_y = 1
+    height = 8
+    width = 11
     box1 = curses.newwin(height, width, begin_y, begin_x)
     box1.box()
-    stdscr.refresh()
     box1.refresh()
 
 # This choice was based on basic hasboro dice setup
@@ -40,7 +38,8 @@ die11 = ['o', 'w', 't', 'o', 'a', 't']
 die12 = ['e', 'r', 't', 't', 'y', 'l']
 die13 = ['t', 'o', 'e', 's', 's', 'i']
 die14 = ['t', 'e', 'r', 'w', 'h', 'v']
-die15 = ['n', 'u', 'i', 'h', 'm', 'Qu']
+#die15 = ['n', 'u', 'i', 'h', 'm', 'q']
+die15 = ['q', 'q', 'q', 'q', 'q', 'q']
 
 
 choices = {
@@ -58,7 +57,7 @@ def main(stdscr):
     
     letter = [random.choice(i) for i in choices.values()]
     number = 1
-    i = 0
+    i = 1
         
     graph = ""
     
@@ -73,6 +72,8 @@ def main(stdscr):
     num_cols = min(len(line) for line in graph)
     
     alphabet = ''.join(set(''.join(graph)))
+    #if 'q' in alphabet:
+    #    alphabet += 'u'
     words = re.compile('[' + alphabet + ']{3,}$', re.I).match
     
     possible_words = set(word.rstrip('\n') 
@@ -83,6 +84,8 @@ def main(stdscr):
     def solve():
         for y, row in enumerate(graph):
             for x, letter in enumerate(row):
+                if letter == 'q':
+                    letter = 'qu'
                 for result in extending(letter, ((x, y),)):
                     yield result
         
@@ -91,7 +94,10 @@ def main(stdscr):
             yield (prefix, path)
         for (nx, ny) in neighbors(path[-1]):
             if (nx, ny) not in path:
-                prefix1 = prefix + graph[ny][nx]
+                if graph[ny][nx] == 'q':
+                    prefix1 = prefix + 'qu'
+                else:
+                    prefix1 = prefix + graph[ny][nx]
                 if prefix1 in prefixes:
                     for result in extending(prefix1, path + ((nx, ny),)):
                         yield result
@@ -120,8 +126,8 @@ def main(stdscr):
     while True:
         c = stdscr.getch()
         if c == ord('b'):
-            print("beginning..")
-            box(stdscr, i)
+            stuff()
+            stdscr.refresh()
             break
         elif c == ord('q'):
             return
@@ -138,17 +144,19 @@ def main(stdscr):
 
     number = 0
     for item in letter:
+        if item == 'q':
+            item = 'qu'
         number += 1
-        final.append(item)
+        final.append(item + " ")
         check_list.append(item)
         if number % 4 == 0:
             check_list.append('\n')
             final_list = ''.join(final)
-            stdscr.addstr(i + 2, 1, final_list)
+            stdscr.addstr(i + 2, 2, final_list)
             stdscr.refresh()
             i += 1
             final = []
-    i += 3
+    i += 4
     stdscr.addstr(i, 0, wordlist)
     stdscr.refresh()
     i += 10
@@ -160,7 +168,7 @@ def main(stdscr):
     stdscr.move(i, 0)    
     stdscr.refresh()
     
-    t_end = time.time() + 180
+    t_end = time.time() + 10
     comp_time = time.time() + 7
     
     while time.time() < t_end and wordlist:
@@ -215,11 +223,11 @@ def main(stdscr):
                 compLen = len(compChoice)
                 if compLen <= 4:
                     compPoints += 1
-                elif wordLen == 5:
+                elif compLen == 5:
                     compPoints += 2
-                elif wordLen == 6:
+                elif compLen == 6:
                     compPoints += 3
-                elif wordLen == 7:
+                elif compLen == 7:
                     compPoints += 5
                 else:
                     compPoints += 11

@@ -56,9 +56,7 @@ def main(stdscr):
     letter = [random.choice(i) for i in choices.values()]
     number = 1
     i = 0
-	
-    text = open("/usr/share/dict/british-english", 'r').readlines()
-    
+        
     graph = ""
     
     for item in letter:
@@ -107,8 +105,11 @@ def main(stdscr):
     stdscr = curses.initscr()
     
     guess = ""
-    guessed = []    
+    guessed = []   
+    compChoice = ""
+    compguessed = []     
     points = 0
+    compPoints = 0
     
     stdscr.addstr(0, 0, "Enter 'b' to begin: (Ctrl + C will end the application)")
     
@@ -155,7 +156,7 @@ def main(stdscr):
     stdscr.move(i, 0)    
     stdscr.refresh()
     
-    t_end = time.time() + 10
+    t_end = time.time() + 13
     comp_time = time.time() + 7
     
     while time.time() < t_end and wordlist:
@@ -197,11 +198,37 @@ def main(stdscr):
                 guess += str(chr(char))
                 
             stdscr.addstr(i, 0, guess)
+            
+            if comp_time < time.time():
+                comp_time = time.time() + 7
+                stdscr.addstr(i+2, 0, "Computer guessed: ")
+                compChoice = random.choice(wordlist)
+                wordlist.remove(compChoice)
+                compguessed.append(compChoice)
+                stdscr.addstr(i+3, 0, " " * len(compChoice))
+                stdscr.addstr(i+3, 0, compChoice)
+                compLen = len(compChoice)
+                if compLen <= 4:
+                    compPoints += 1
+                elif wordLen == 5:
+                    compPoints += 2
+                elif wordLen == 6:
+                    compPoints += 3
+                elif wordLen == 7:
+                    compPoints += 5
+                else:
+                    compPoints += 11
+                    
+                compChoice = ""               
+                
+            
     stdscr.refresh()
     curses.endwin()
     print()    
     print("You guessed: " + ' '.join(guessed))
     print("You recieved", points ,"points")
+    print("Computer guessed: " + ' '.join(compguessed))
+    print("Comp recieved", compPoints ,"points")
     
         
 if __name__ == "__main__":

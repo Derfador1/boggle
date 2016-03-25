@@ -23,6 +23,8 @@ def box(stdscr, i):
     stdscr.refresh()
     box1.refresh()
 
+# This choice was based on basic hasboro dice setup
+# found on everything2.com/title/Boggle
 die0 = ['a', 'e', 'a', 'n', 'e', 'g']
 die1 = ['a', 'h', 's', 'p', 'c', 'o']
 die2 = ['a', 's', 'p', 'f', 'f', 'k']
@@ -44,14 +46,15 @@ die15 = ['n', 'u', 'i', 'h', 'm', 'Qu']
 choices = {
     'zero':die0, 'one':die1, 'two':die2, 'three':die3, 
     'four':die4, 'five':die5, 'six':die6, 'seven':die7, 'eight':die8, 
-    'nine':die9, 'ten':die10, 'eleven':die11, 'twelve':die12, 'thirteen':die13, 
-    'fourteen':die14, 'fifteen':die15
+    'nine':die9, 'ten':die10, 'eleven':die11, 'twelve':die12, 
+    'thirteen':die13,'fourteen':die14, 'fifteen':die15
     }
 
 def main(stdscr):
     # found the following code with a little seperate implementation on:
     # stackoverflow.com/questions/746082/
-    # how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-solver#750012
+    # how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-
+    # solver#750012
     
     letter = [random.choice(i) for i in choices.values()]
     number = 1
@@ -111,7 +114,8 @@ def main(stdscr):
     points = 0
     compPoints = 0
     
-    stdscr.addstr(0, 0, "Enter 'b' to begin: (Ctrl + C will end the application)")
+    stdscr.addstr(0, 0, "Enter 'b' to begin: " +
+        "(Ctrl + C will end the application)")
     
     while True:
         c = stdscr.getch()
@@ -156,7 +160,7 @@ def main(stdscr):
     stdscr.move(i, 0)    
     stdscr.refresh()
     
-    t_end = time.time() + 13
+    t_end = time.time() + 180
     comp_time = time.time() + 7
     
     while time.time() < t_end and wordlist:
@@ -187,7 +191,9 @@ def main(stdscr):
                     guess = ""
                 else:
                     guess = ""
-            elif char == 263: #magic number for backspace because i do not know how to type the char version of it
+            # magic number for backspace because i do not 
+            # know how to type the char version of it
+            elif char == 263:
                 if guess:
                     guess = guess[:-1]
                     (y, x) = stdscr.getyx()
@@ -200,7 +206,6 @@ def main(stdscr):
             stdscr.addstr(i, 0, guess)
             
             if comp_time < time.time():
-                comp_time = time.time() + 7
                 stdscr.addstr(i+2, 0, "Computer guessed: ")
                 compChoice = random.choice(wordlist)
                 wordlist.remove(compChoice)
@@ -219,7 +224,8 @@ def main(stdscr):
                 else:
                     compPoints += 11
                     
-                compChoice = ""               
+                compChoice = ""
+                comp_time = time.time() + 7           
                 
             
     stdscr.refresh()

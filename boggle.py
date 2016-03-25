@@ -74,8 +74,10 @@ def main(stdscr):
     alphabet = ''.join(set(''.join(graph)))
     words = re.compile('[' + alphabet + ']{3,}$', re.I).match
     
-    possible_words = set(word.rstrip('\n') for word in open('/usr/share/dict/words') if words(word.lower()))
-    prefixes = set(word[:i] for word in possible_words for i in range(2, len(word) + 1))
+    possible_words = set(word.rstrip('\n') 
+        for word in open('/usr/share/dict/words') if words(word.lower()))
+    prefixes = set(word[:i] 
+        for word in possible_words for i in range(2, len(word) + 1))
     
     def solve():
         for y, row in enumerate(graph):
@@ -124,7 +126,7 @@ def main(stdscr):
             y, x = stdscr.getyx()
             stdscr.addstr(0, x, "Incorrect")
             stdscr.move(0, x)
-    
+    #error with qu not being treated as one word
 
     final = []
     check_list = []    
@@ -196,7 +198,8 @@ def main(stdscr):
                 
             stdscr.addstr(i, 0, guess)
     stdscr.refresh()
-    curses.endwin()    
+    curses.endwin()
+    print()    
     print("You guessed: " + ' '.join(guessed))
     print("You recieved", points ,"points")
     

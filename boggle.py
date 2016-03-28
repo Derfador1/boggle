@@ -45,12 +45,7 @@ def print_graph(i, game_board, stdscr):
     i += 10
     return(i)
 
-def main(stdscr):
-    # found the following code with a little seperate implementation on:
-    # stackoverflow.com/questions/746082/
-    # how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-
-    # solver#750012
-    
+def main(stdscr):    
     player = bc.Player()
     comp = bc.Player()
     
@@ -61,6 +56,11 @@ def main(stdscr):
     
     game_board.generate_graph(number)
     game_board.row_col()
+    
+    # found the following code with a little seperate implementation on:
+    # stackoverflow.com/questions/746082/
+    # how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-
+    # solver#750012    
     
     alphabet = ''.join(set(''.join(game_board._graph)))
     if 'q' in alphabet:
@@ -100,7 +100,8 @@ def main(stdscr):
                 yield (nx, ny)
             
     
-    game_board._wordlist = (' '.join(sorted(set(word for (word, path) in solve()))))
+    game_board._wordlist = (' '.join(
+        sorted(set(word for (word, path) in solve()))))
     
     stdscr = curses.initscr()
     
@@ -139,13 +140,14 @@ def main(stdscr):
     
     while time.time() < t_end and game_board._wordlist:
         stdscr.nodelay(True)        
+        curses.noecho()
         char = stdscr.getch()
         stdscr.refresh()
         
         if char != -1:
             if chr(char) == "\n":
                 stdscr.addstr(i, 0, " " * 30)
-                stdscr.addstr(i+1, 0, " " * 30)
+                stdscr.addstr(i+1, 0, " " * 49)
                 stdscr.move(i, 0)
                 if guess in game_board._wordlist:
                     game_board._wordlist.remove(guess)
@@ -153,7 +155,9 @@ def main(stdscr):
                     player.point(guess)
                     guess = ""
                 else:
-                    stdscr.addstr(i+1, 0, "That word does not work")
+                    stdscr.addstr(i+1, 0, "That word has "
+                    + "either been guessed or isnt correct")
+
                     guess = ""
             elif char == curses.KEY_BACKSPACE:
                 if guess:
@@ -163,14 +167,19 @@ def main(stdscr):
                     stdscr.move(y, x-1)
                     stdscr.refresh()
             else:
-                if len(guess) > 17: #changed this
+                if len(guess) > 17:
                     continue
                 else:
                     guess += str(chr(char))
 
             
             stdscr.addstr(i, 0, guess)
-                        
+            #def comp_func(comp, game_board, stdscr, comp_time):
+            #comp_choice(global var)
+            #return(comp_time)
+            #or 
+            #return comp_choice
+            #outside of function comp_time = comp_time + 7   
             if comp_time < time.time():
                 stdscr.addstr(i+2, 0, "Computer guessed: ")
                 compChoice = random.choice(game_board._wordlist)

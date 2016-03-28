@@ -108,7 +108,7 @@ def main(stdscr):
     compChoice = ""
     
     stdscr.addstr(0, 0, "Enter 'b' to begin: " +
-        "(Ctrl + C will end the application)")
+        "(Ctrl + C or 'q' will end the application)")
     
     while True:
         c = stdscr.getch()
@@ -153,9 +153,8 @@ def main(stdscr):
                     guess = ""
                 else:
                     guess = ""
-            # magic number for backspace because i do not 
-            # know how to type the char version of it
-            elif char == 263:
+            # captures the backspace character
+            elif char == curses.KEY_BACKSPACE:
                 if guess:
                     guess = guess[:-1]
                     (y, x) = stdscr.getyx()
@@ -163,8 +162,11 @@ def main(stdscr):
                     stdscr.move(y, x-1)
                     stdscr.refresh()
             else:
-                guess += str(chr(char))
-                
+                if len(guess) > 17: #changed this
+                    continue
+                else:
+                    guess += str(chr(char))
+
             stdscr.addstr(i, 0, guess)
             
             if comp_time < time.time():

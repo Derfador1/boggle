@@ -1,4 +1,3 @@
-#begining file
 import random
 import re
 
@@ -84,9 +83,9 @@ class GameBoard:
                 i += 1
                 final = []
         i += 4
-        stdscr.addstr(i, 0, self._wordlist) #remove later
+        #stdscr.addstr(i, 0, self._wordlist) #remove later
         stdscr.refresh()
-        i += 10
+        #i += 10
         return(i)
         
     def get_words(self):

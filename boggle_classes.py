@@ -1,5 +1,6 @@
 #begining file
 import random
+import re
 
 class Player:
     def __init__(self):
@@ -83,7 +84,56 @@ class GameBoard:
                 i += 1
                 final = []
         i += 4
-        stdscr.addstr(i, 0, self._wordlist) #remove later
+        #stdscr.addstr(i, 0, self._wordlist) #remove later
         stdscr.refresh()
-        i += 10
+        #i += 10
         return(i)
+        
+    def get_words(self):
+        self._alphabet = ''.join(set(''.join(self._graph)))
+        if 'q' in self._alphabet:
+            self._alphabet += 'u'
+        self._words = re.compile('[' + self._alphabet + ']{3,}$', re.I).match
+    
+        self._possible_words = set(word.rstrip('\n') 
+            for word in open('/usr/share/dict/words') if self._words(word.lower()))
+            
+    def get_prefix(self):    
+        self._prefixes = set(word[:i] 
+            for word in self._possible_words for i in range(2, len(word) + 1))
+
+    # found the following code with a little seperate implementation on:
+    # stackoverflow.com/questions/746082/
+    # how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-
+    # solver#750012   
+    
+    def solve(self):
+        for y, row in enumerate(self._graph):
+            for x, letter in enumerate(row):
+                #if letter == 'q':
+                #    letter = 'qu'
+                for result in self.extending(letter, ((x, y),)):
+                    yield result
+        
+    def extending(self, prefix, path):
+        if prefix in self._possible_words:
+            yield (prefix, path)
+        for (nx, ny) in self.neighbors(path[-1]):
+            if (nx, ny) not in path:
+                if self._graph[ny][nx] == 'q':
+                    prefix1 = prefix + 'qu'
+                else:
+                    prefix1 = prefix + self._graph[ny][nx]
+                if prefix1 in self._prefixes:
+                    for result in self.extending(prefix1, path + ((nx, ny),)):
+                        yield result
+    
+    def neighbors(self, variable):
+        x, y = variable
+        for nx in range(max(0, x - 1), min(x+2, self._num_cols)):
+            for ny in range(max(0, y - 1), min(y + 2, self._num_rows)):
+                yield (nx, ny)
+            
+    def assemble_wordlist(self):
+        self._wordlist = (' '.join(
+            sorted(set(word for (word, path) in self.solve()))))

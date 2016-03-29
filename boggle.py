@@ -21,29 +21,16 @@ def stuff():
     box1.box()
     box1.refresh()
     
-def print_graph(i, game_board, stdscr):    
-    final = []
-    check_list = []    
-
-    number = 0
-    for item in game_board._letter:
-        if item == 'q':
-            item = 'qu'
-        number += 1
-        final.append(item + " ")
-        check_list.append(item)
-        if number % 4 == 0:
-            check_list.append('\n')
-            final_list = ''.join(final)
-            stdscr.addstr(i + 1, 2, final_list)
-            stdscr.refresh()
-            i += 1
-            final = []
-    i += 4
-    stdscr.addstr(i, 0, game_board._wordlist)
-    stdscr.refresh()
-    i += 10
-    return(i)
+def comp_func(comp, game_board, stdscr, comp_time, i):
+    compChoice = ""
+    stdscr.addstr(i+2, 0, "Computer guessed: ")
+    compChoice = random.choice(game_board._wordlist)
+    game_board._wordlist.remove(compChoice)
+    comp._guessed.append(compChoice)
+    comp.point(compChoice)
+    stdscr.addstr(i+3, 0, " " * (len(compChoice) + 10))
+    stdscr.addstr(i+3, 0, compChoice)
+    compChoice = ""
 
 def main(stdscr):    
     player = bc.Player()
@@ -69,6 +56,7 @@ def main(stdscr):
     
     possible_words = set(word.rstrip('\n') 
         for word in open('/usr/share/dict/words') if words(word.lower()))
+        
     prefixes = set(word[:i] 
         for word in possible_words for i in range(2, len(word) + 1))
     
@@ -106,7 +94,6 @@ def main(stdscr):
     stdscr = curses.initscr()
     
     guess = "" 
-    compChoice = ""
     
     stdscr.addstr(0, 0, "Enter 'b' to begin: " +
         "(Ctrl + C or 'q' will end the application)")
@@ -126,7 +113,7 @@ def main(stdscr):
             stdscr.addstr(0, x, "Incorrect")
             stdscr.move(0, x)
     
-    i = print_graph(i, game_board, stdscr)
+    i = game_board.print_graph(i, stdscr)
     
     game_board._wordlist = game_board._wordlist.split(' ')
 
@@ -144,6 +131,10 @@ def main(stdscr):
         char = stdscr.getch()
         stdscr.refresh()
         
+        if comp_time < time.time():
+            comp_func(comp, game_board, stdscr, comp_time, i)
+            comp_time = comp_time + 7              
+        
         if char != -1:
             if chr(char) == "\n":
                 stdscr.addstr(i, 0, " " * 30)
@@ -159,38 +150,22 @@ def main(stdscr):
                     + "either been guessed or isnt correct")
 
                     guess = ""
-            elif char == curses.KEY_BACKSPACE:
+                    
+            elif char == 263 or char == 127:
                 if guess:
                     guess = guess[:-1]
                     (y, x) = stdscr.getyx()
                     stdscr.addstr(y, x-1, " ")
                     stdscr.move(y, x-1)
                     stdscr.refresh()
+                stdscr.addstr(i, 0, " " * 30)
             else:
                 if len(guess) > 17:
                     continue
                 else:
                     guess += str(chr(char))
 
-            
             stdscr.addstr(i, 0, guess)
-            #def comp_func(comp, game_board, stdscr, comp_time):
-            #comp_choice(global var)
-            #return(comp_time)
-            #or 
-            #return comp_choice
-            #outside of function comp_time = comp_time + 7   
-            if comp_time < time.time():
-                stdscr.addstr(i+2, 0, "Computer guessed: ")
-                compChoice = random.choice(game_board._wordlist)
-                game_board._wordlist.remove(compChoice)
-                comp._guessed.append(compChoice)
-                comp.point(compChoice)
-                stdscr.addstr(i+3, 0, " " * len(compChoice))
-                stdscr.addstr(i+3, 0, compChoice)
-                compChoice = ""
-                comp_time = time.time() + 7                 
-            
     stdscr.refresh()
     curses.endwin()
     print()    
@@ -205,7 +180,7 @@ if __name__ == "__main__":
         os.system('clear')
         curses.wrapper(main)
     except KeyboardInterrupt:
-        print('\nInterrupted...')
+        print('Interrupted...')
         try:
             sys.exit(0)
         except SystemExit:

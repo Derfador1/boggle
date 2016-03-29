@@ -52,7 +52,7 @@ class GameBoard:
         self._letter = [random.choice(i) for i in self.choices.values()]
         self._wordlist = ""
         
-    def generate_graph(self, number):    
+    def generate_graph(self, number):
         for item in self._letter:
             self._graph += str(item).lower()
             if number % 4 == 0:
@@ -63,3 +63,27 @@ class GameBoard:
     def row_col(self):
         self._num_rows = len(self._graph)
         self._num_cols = min(len(line) for line in self._graph)
+        
+    def print_graph(self, i, stdscr):    
+        final = []
+        check_list = []    
+
+        number = 0
+        for item in self._letter:
+            if item == 'q':
+                 item = 'qu'
+            number += 1
+            final.append(item + " ")
+            check_list.append(item)
+            if number % 4 == 0:
+                check_list.append('\n')
+                final_list = ''.join(final)
+                stdscr.addstr(i + 1, 2, final_list)
+                stdscr.refresh()
+                i += 1
+                final = []
+        i += 4
+        stdscr.addstr(i, 0, self._wordlist) #remove later
+        stdscr.refresh()
+        i += 10
+        return(i)

@@ -123,7 +123,15 @@ def main(stdscr):
 
             stdscr.addstr(i, 0, guess)
     stdscr.refresh()
-    curses.endwin()
+    curses.endwin() #might not need this
+    #i += 1
+    #stdscr.addstr(i, 0, "Points for player")
+    #i += 1
+    #stdscr.addstr(i, 0, "Player guessed")
+    #i += 1
+    #stdscr.addstr(i, 0, "Points for comp")
+    #i += 1
+    #stdscr.addstr(i, 0, "Comp guessed")
 
 if __name__ == "__main__":
     try:

@@ -8,7 +8,6 @@ import boggle_classes as bc
 
 import curses
 from itertools import permutations
-import re
 
 random.seed(time.time())
 
@@ -44,52 +43,9 @@ def main(stdscr):
     game_board.generate_graph(number)
     game_board.row_col()
     
-    # found the following code with a little seperate implementation on:
-    # stackoverflow.com/questions/746082/
-    # how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-
-    # solver#750012    
-    
-    alphabet = ''.join(set(''.join(game_board._graph)))
-    if 'q' in alphabet:
-        alphabet += 'u'
-    words = re.compile('[' + alphabet + ']{3,}$', re.I).match
-    
-    possible_words = set(word.rstrip('\n') 
-        for word in open('/usr/share/dict/words') if words(word.lower()))
-        
-    prefixes = set(word[:i] 
-        for word in possible_words for i in range(2, len(word) + 1))
-    
-    def solve():
-        for y, row in enumerate(game_board._graph):
-            for x, letter in enumerate(row):
-                #if letter == 'q':
-                #    letter = 'qu'
-                for result in extending(letter, ((x, y),)):
-                    yield result
-        
-    def extending(prefix, path):
-        if prefix in possible_words:
-            yield (prefix, path)
-        for (nx, ny) in neighbors(path[-1]):
-            if (nx, ny) not in path:
-                if game_board._graph[ny][nx] == 'q':
-                    prefix1 = prefix + 'qu'
-                else:
-                    prefix1 = prefix + game_board._graph[ny][nx]
-                if prefix1 in prefixes:
-                    for result in extending(prefix1, path + ((nx, ny),)):
-                        yield result
-    
-    def neighbors(variable):
-        x, y = variable
-        for nx in range(max(0, x - 1), min(x+2, game_board._num_cols)):
-            for ny in range(max(0, y - 1), min(y + 2, game_board._num_rows)):
-                yield (nx, ny)
-            
-    
-    game_board._wordlist = (' '.join(
-        sorted(set(word for (word, path) in solve()))))
+    game_board.get_words()
+    game_board.get_prefix()
+    game_board. assemble_wordlist()
     
     stdscr = curses.initscr()
     

@@ -11,6 +11,9 @@ from itertools import permutations
 
 random.seed(time.time())
 
+player = bc.Player()
+comp = bc.Player()
+
 def stuff():
     begin_x = 1
     begin_y = 1
@@ -31,10 +34,7 @@ def comp_func(comp, game_board, stdscr, comp_time, i):
     stdscr.addstr(i+3, 0, compChoice)
     compChoice = ""
 
-def main(stdscr):    
-    player = bc.Player()
-    comp = bc.Player()
-    
+def main(stdscr):
     game_board = bc.GameBoard()
     
     number = 1
@@ -78,7 +78,7 @@ def main(stdscr):
     stdscr.move(i, 0)    
     stdscr.refresh()
     
-    t_end = time.time() + 10
+    t_end = time.time() + 180
     comp_time = time.time() + 7
     
     while time.time() < t_end and game_board._wordlist:
@@ -124,19 +124,16 @@ def main(stdscr):
             stdscr.addstr(i, 0, guess)
     stdscr.refresh()
     curses.endwin()
-    #fix this , need to print and still see in when curses exits
-    print()    
-    print("You guessed: " + ' '.join(player._guessed))
-    print("You recieved", player._score ,"points")
-    print("Computer guessed: " + ' '.join(comp._guessed))
-    print("Comp recieved", comp._score ,"points")
-    
-        
+
 if __name__ == "__main__":
     try:
         os.system('clear')
         os.environ['TERM'] = 'xterm'
         curses.wrapper(main)
+        print("You guessed: " + ' '.join(player._guessed))
+        print("You recieved", player._score ,"points")
+        print("Computer guessed: " + ' '.join(comp._guessed))
+        print("Comp recieved", comp._score ,"points")
     except KeyboardInterrupt:
         print('Interrupted...')
         try:

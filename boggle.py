@@ -78,7 +78,7 @@ def main(stdscr):
     stdscr.move(i, 0)    
     stdscr.refresh()
     
-    t_end = time.time() + 20
+    t_end = time.time() + 180
     comp_time = time.time() + 7
     
     while time.time() < t_end and game_board._wordlist:
@@ -104,7 +104,7 @@ def main(stdscr):
                 else:
                     stdscr.addstr(i+1, 0, "That word has "
                     + "either been guessed or isnt correct")
-
+                    
                     guess = ""
                     
             elif char == 263 or char == 127:
@@ -134,6 +134,7 @@ def main(stdscr):
 if __name__ == "__main__":
     try:
         os.system('clear')
+        os.environ['TERM'] = 'xterm'
         curses.wrapper(main)
     except KeyboardInterrupt:
         print('Interrupted...')

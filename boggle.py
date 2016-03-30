@@ -100,12 +100,12 @@ def main(stdscr):
                     game_board._wordlist.remove(guess)
                     player._guessed.append(guess)
                     player.point(guess)
-                    guess = ""
+                    #guess = ""
                 else:
                     stdscr.addstr(i+1, 0, "That word has "
                     + "either been guessed or isnt correct")
                     
-                    guess = ""
+                guess = ""
                     
             elif char == 263 or char == 127:
                 if guess:
@@ -135,6 +135,9 @@ def main(stdscr):
 
 if __name__ == "__main__":
     try:
+        if sys.version_info < (3,0,0):
+            sys.stderr.write("You need python 3 or higher to run this script\n")
+            exit(1)
         os.system('clear')
         os.environ['TERM'] = 'xterm'
         curses.wrapper(main)

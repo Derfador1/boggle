@@ -16,9 +16,9 @@ comp = bc.Player()
 
 def stuff():
     begin_x = 1
-    begin_y = 1
+    begin_y = 2
     height = 6
-    width = 11
+    width = 15
     box1 = curses.newwin(height, width, begin_y, begin_x)
     box1.box()
     box1.refresh()
@@ -35,10 +35,23 @@ def comp_func(comp, game_board, stdscr, comp_time, i):
     compChoice = ""
 
 def main(stdscr):
-    game_board = bc.GameBoard()
-    
     number = 1
     i = 1
+    
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+			
+    try:
+        arg = int(arg)
+        string = "Computer guess time is " + str(arg)
+        stdscr.addstr(i, 0, string)
+    except ValueError:
+        stdscr.addstr(i, 0, "Computer guess time defaulted to 7")
+        arg = 7
+   
+    i+=1
+   
+    game_board = bc.GameBoard()
     
     game_board.generate_graph(number)
     game_board.row_col()
@@ -79,17 +92,17 @@ def main(stdscr):
     stdscr.refresh()
     
     t_end = time.time() + 180
-    comp_time = time.time() + 7
+    comp_time = time.time() + arg
     
     while time.time() < t_end and game_board._wordlist:
-        stdscr.nodelay(True)        
+        stdscr.nodelay(True)
         curses.noecho()
         char = stdscr.getch()
-        stdscr.refresh()
+        stdscr.refresh() 
         
         if comp_time < time.time():
             comp_func(comp, game_board, stdscr, comp_time, i)
-            comp_time = comp_time + 7              
+            comp_time = comp_time + arg             
         
         if char != -1:
             if chr(char) == "\n":
@@ -128,7 +141,7 @@ def main(stdscr):
     #might not need this
     #i += 1
     #stdscr.addstr(i, 0, "Points for player")
-    #i += 1
+    #i += 1fn-
     #stdscr.addstr(i, 0, "Player guessed")
     #i += 1
     #stdscr.addstr(i, 0, "Points for comp")

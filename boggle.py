@@ -13,6 +13,7 @@ random.seed(time.time())
 
 player = bc.Player()
 comp = bc.Player()
+game_board = bc.GameBoard()
 
 def stuff():
     begin_x = 1
@@ -49,8 +50,6 @@ def main(stdscr):
         return(2)
    
     i+=1
-   
-    game_board = bc.GameBoard()
     
     game_board.generate_graph(number)
     game_board.row_col()
@@ -162,6 +161,8 @@ if __name__ == "__main__":
             print("You recieved", player._score ,"points")
             print("Computer guessed: " + ' '.join(comp._guessed))
             print("Comp recieved", comp._score ,"points")
+            print("Full wordlist: ")
+            print(game_board._full_wordlist)
     except KeyboardInterrupt:
         print('Interrupted...')
         try:

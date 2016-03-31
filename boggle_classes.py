@@ -37,8 +37,8 @@ class GameBoard:
     die12 = ['e', 'r', 't', 't', 'y', 'l']
     die13 = ['t', 'o', 'e', 's', 's', 'i']
     die14 = ['t', 'e', 'r', 'w', 'h', 'v']
-    #die15 = ['n', 'u', 'i', 'h', 'm', 'q']
-    die15 = ['q', 'q', 'q', 'q', 'q', 'q']
+    die15 = ['n', 'u', 'i', 'h', 'm', 'q']
+    #die15 = ['q', 'q', 'q', 'q', 'q', 'q']
     
     choices = {
         'zero':die0, 'one':die1, 'two':die2, 'three':die3, 

@@ -139,3 +139,5 @@ class GameBoard:
     def assemble_wordlist(self):
         self._wordlist = (' '.join(
             sorted(set(word for (word, path) in self.solve()))))
+            
+        self._full_wordlist = self._wordlist

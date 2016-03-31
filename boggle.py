@@ -89,7 +89,7 @@ def main(stdscr):
     stdscr.move(i, 0)    
     stdscr.refresh()
     
-    t_end = time.time() + 10
+    t_end = time.time() + 180
     comp_time = time.time() + arg
     
     while time.time() < t_end and game_board._wordlist:
@@ -111,7 +111,6 @@ def main(stdscr):
                     game_board._wordlist.remove(guess)
                     player._guessed.append(guess)
                     player.point(guess)
-                    #guess = ""
                 else:
                     stdscr.addstr(i+1, 0, "That word has "
                     + "either been guessed or isnt correct")

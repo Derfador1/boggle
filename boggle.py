@@ -37,17 +37,16 @@ def comp_func(comp, game_board, stdscr, comp_time, i):
 def main(stdscr):
     number = 1
     i = 1
-    
-    if len(sys.argv) > 1:
-        arg = sys.argv[1]
-			
-    try:
-        arg = int(arg)
-        string = "Computer guess time is " + str(arg)
-        stdscr.addstr(i, 0, string)
-    except ValueError:
-        stdscr.addstr(i, 0, "Computer guess time defaulted to 7")
-        arg = 7
+    arg = 7
+    if len(sys.argv) == 2:
+        try:
+            arg = int(sys.argv[1])
+            string = "Computer guess time is " + str(arg)
+            stdscr.addstr(i, 0, string)
+        except ValueError:
+            stdscr.addstr(i, 0, "Computer guess time defaulted to 7")
+    elif len(sys.argv) > 2:
+        return(2)
    
     i+=1
    
@@ -91,7 +90,7 @@ def main(stdscr):
     stdscr.move(i, 0)    
     stdscr.refresh()
     
-    t_end = time.time() + 180
+    t_end = time.time() + 10
     comp_time = time.time() + arg
     
     while time.time() < t_end and game_board._wordlist:
@@ -156,11 +155,13 @@ if __name__ == "__main__":
             exit(1)
         os.system('clear')
         os.environ['TERM'] = 'xterm'
-        curses.wrapper(main)
-        print("You guessed: " + ' '.join(player._guessed))
-        print("You recieved", player._score ,"points")
-        print("Computer guessed: " + ' '.join(comp._guessed))
-        print("Comp recieved", comp._score ,"points")
+        if curses.wrapper(main) == 2:
+            print("Too many arguments given")
+        else:
+            print("You guessed: " + ' '.join(player._guessed))
+            print("You recieved", player._score ,"points")
+            print("Computer guessed: " + ' '.join(comp._guessed))
+            print("Comp recieved", comp._score ,"points")
     except KeyboardInterrupt:
         print('Interrupted...')
         try:

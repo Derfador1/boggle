@@ -6,6 +6,7 @@ class Player:
         self._score = 0
         self._guessed = []
     
+    # point system for boggle
     def point(self, word):
         wordlen = len(word)
         if wordlen <= 4:
@@ -22,6 +23,8 @@ class Player:
 class GameBoard:
     # This choice was based on basic hasboro dice setup
     # found on everything2.com/title/Boggle
+    # I used this distribution because it is the current
+    # hasboro dice setup
     die0 = ['a', 'e', 'a', 'n', 'e', 'g']
     die1 = ['a', 'h', 's', 'p', 'c', 'o']
     die2 = ['a', 's', 'p', 'f', 'f', 'k']
@@ -35,7 +38,7 @@ class GameBoard:
     die10 = ['t', 's', 't', 'i', 'y', 'd']
     die11 = ['o', 'w', 't', 'o', 'a', 't']
     die12 = ['e', 'r', 't', 't', 'y', 'l']
-    die13 = ['t', 'o', 'e', 's', 's', 'i']
+    die13 = ['t', 'o', 'e', 's', ';,.cdftv-s', 'i']
     die14 = ['t', 'e', 'r', 'w', 'h', 'v']
     die15 = ['n', 'u', 'i', 'h', 'm', 'q']
     #die15 = ['q', 'q', 'q', 'q', 'q', 'q']
@@ -49,6 +52,7 @@ class GameBoard:
 
     def __init__(self):
         self._graph = ""
+        # gives me the letters from the 16 dice
         self._letter = [random.choice(i) for i in self.choices.values()]
         self._wordlist = ""
         
@@ -59,11 +63,13 @@ class GameBoard:
                 self._graph += ' '
             number += 1
         self._graph = self._graph.split()
-        
+    
+    # gives me number of rows and columns    
     def row_col(self):
         self._num_rows = len(self._graph)
         self._num_cols = min(len(line) for line in self._graph)
-        
+    
+    # used to print my game board on the curses screen  
     def print_graph(self, i, stdscr):    
         final = []
         check_list = []    
@@ -85,10 +91,13 @@ class GameBoard:
                 i += 1
                 final = []
         i += 4
-        #stdscr.addstr(i, 0, self._wordlist) #remove later
         stdscr.refresh()
-        #i += 10
         return(i)
+
+    # found the following code with a little seperate implementation on:
+    # stackoverflow.com/questions/746082/
+    # how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-
+    # solver#750012   
         
     def get_words(self):
         self._alphabet = ''.join(set(''.join(self._graph)))
@@ -103,11 +112,6 @@ class GameBoard:
     def get_prefix(self):    
         self._prefixes = set(word[:i] 
             for word in self._possible_words for i in range(2, len(word) + 1))
-
-    # found the following code with a little seperate implementation on:
-    # stackoverflow.com/questions/746082/
-    # how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-
-    # solver#750012   
     
     def solve(self):
         for y, row in enumerate(self._graph):
@@ -139,5 +143,5 @@ class GameBoard:
     def assemble_wordlist(self):
         self._wordlist = (' '.join(
             sorted(set(word for (word, path) in self.solve()))))
-            
+        # a seperate wordlist i use to save the unchanged wordlist
         self._full_wordlist = self._wordlist

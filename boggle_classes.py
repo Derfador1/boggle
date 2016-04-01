@@ -21,26 +21,29 @@ class Player:
             self._score  += 11
             
 class GameBoard:
-    # This choice was based on basic hasboro dice setup
-    # found on everything2.com/title/Boggle
-    # I used this distribution because it is the current
-    # hasboro dice setup
-    die0 = ['a', 'e', 'a', 'n', 'e', 'g']
-    die1 = ['a', 'h', 's', 'p', 'c', 'o']
-    die2 = ['a', 's', 'p', 'f', 'f', 'k']
-    die3 = ['o', 'b', 'j', 'o', 'a', 'b']
-    die4 = ['i', 'o', 't', 'm', 'u', 'c']
-    die5 = ['r', 'y', 'v', 'd', 'e', 'l']
-    die6 = ['l', 'r', 'e', 'i', 'x', 'd']
-    die7 = ['e', 'i', 'u', 'n', 'e', 's']
-    die8 = ['w', 'n', 'g', 'e', 'e', 'h']
-    die9 = ['l', 'n', 'h', 'n', 'r', 'z']
-    die10 = ['t', 's', 't', 'i', 'y', 'd']
-    die11 = ['o', 'w', 't', 'o', 'a', 't']
-    die12 = ['e', 'r', 't', 't', 'y', 'l']
-    die13 = ['t', 'o', 'e', 's', ';,.cdftv-s', 'i']
-    die14 = ['t', 'e', 'r', 'w', 'h', 'v']
-    die15 = ['n', 'u', 'i', 'h', 'm', 'q']
+    # This board was chosen from 
+    # www.bananagrammer.com/2013/10/
+    # the-boggle-cude-redesign-and-its-effect.html
+    # this version was the classic boggle version
+    # made 1976-1986, I picked this version
+    # because it is the most straight forward
+    # simple version I have found
+    die0 = ['a', 'a', 'c', 'i', 'o', 't']
+    die1 = ['a', 'b', 'i', 'l', 't', 'y']
+    die2 = ['a', 'b', 'j', 'm', 'o', 'q']
+    die3 = ['a', 'c', 'd', 'e', 'm', 'p']
+    die4 = ['a', 'c', 'e', 'l', 'r', 's']
+    die5 = ['a', 'd', 'e', 'n', 'v', 'z']
+    die6 = ['a', 'h', 'm', 'o', 'r', 's']
+    die7 = ['b', 'i', 'f', 'o', 'r', 'x']
+    die8 = ['d', 'e', 'n', 'o', 's', 'w']
+    die9 = ['d', 'k', 'n', 'o', 't', 'u']
+    die10 = ['e', 'e', 'f', 'h', 'i', 'y']
+    die11 = ['e', 'g', 'k', 'l', 'u', 'y']
+    die12 = ['e', 'g', 'i', 'n', 't', 'v']
+    die13 = ['e', 'h', 'i', 'n', 'p', 's']
+    die14 = ['e', 'l', 'p', 's', 't', 'u']
+    die15 = ['g', 'i', 'l', 'r', 'u', 'w']
     #die15 = ['q', 'q', 'q', 'q', 'q', 'q']
     
     choices = {

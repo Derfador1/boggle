@@ -11,10 +11,13 @@ from itertools import permutations
 
 random.seed(time.time())
 
+# might be bad to have these global but i need them seen
+# throughout the program
 player = bc.Player()
 comp = bc.Player()
 game_board = bc.GameBoard()
 
+# code for my box setup around my graph words
 def stuff():
     begin_x = 1
     begin_y = 2
@@ -23,7 +26,8 @@ def stuff():
     box1 = curses.newwin(height, width, begin_y, begin_x)
     box1.box()
     box1.refresh()
-    
+ 
+# function that takes care of all the computer actions    
 def comp_func(comp, game_board, stdscr, comp_time, i):
     compChoice = ""
     stdscr.addstr(i+2, 0, "Computer guessed: ")
@@ -39,6 +43,7 @@ def main(stdscr):
     number = 1
     i = 1
     arg = 7
+    # check for command line arguments involving computer time
     if len(sys.argv) == 2:
         try:
             arg = int(sys.argv[1])
@@ -102,6 +107,7 @@ def main(stdscr):
             comp_func(comp, game_board, stdscr, comp_time, i)
             comp_time = comp_time + arg             
         
+        # this section takes care of user input with getch()
         if char != -1:
             if chr(char) == "\n":
                 stdscr.addstr(i, 0, " " * 30)
@@ -116,7 +122,7 @@ def main(stdscr):
                     + "either been guessed or isnt correct")
                     
                 guess = ""
-                    
+            # backspace character        
             elif char == 263 or char == 127:
                 if guess:
                     guess = guess[:-1]
@@ -134,20 +140,10 @@ def main(stdscr):
             stdscr.addstr(i, 0, guess)
     stdscr.refresh()
     curses.endwin() 
-    #stdscr.nodelay(False)
-    #might not need this
-    #i += 1
-    #stdscr.addstr(i, 0, "Points for player")
-    #i += 1fn-
-    #stdscr.addstr(i, 0, "Player guessed")
-    #i += 1
-    #stdscr.addstr(i, 0, "Points for comp")
-    #i += 1
-    #stdscr.addstr(i, 0, "Comp guessed")
-    #any input equals exit!
 
 if __name__ == "__main__":
     try:
+		# makes sense version is 3 or greater
         if sys.version_info < (3,0,0):
             sys.stderr.write("You need python 3 or higher to run this script\n")
             exit(1)
